@@ -1,5 +1,6 @@
 
-from math import log10
+from __future__ import division
+from math import log10, sqrt
 from string import punctuation
 import os
 
@@ -11,7 +12,7 @@ DATASET = 'docs'
 
 # Return unique words from a sentence
 def extract_unique_words(sentence):
-	return sentence.translate(None, punctuation).lower().split()
+	return sentence.translate(None, punctuation).split()
 
 # Return the document frequency for each term in the input list
 def computeDFs(unique_words, list_of_assignment_files):
@@ -65,10 +66,44 @@ def computeTFIDFweightvector(assignment_file, unique_words, IDFs):
 
 	for idx in range(0, len(unique_words)):
 		TF = computeTF(assignment_file, unique_words[idx])
+
+		print 'TF'
+		print TF
+		print '\n'
+
 		weightVector = TF * IDFs[idx]
+
+		print 'Weight Vector'
+		print weightVector
+		print '\n'
+		
 		list_of_TFIDFweightvector.append(weightVector)
 
 	return list_of_TFIDFweightvector
+
+
+# Return the value of cosine between two document vectors
+def compareDocument(TFIDF_weightvector_1, TFIDF_weightvector_2):
+	# Compute the dot products
+	dotProducts = 0
+	
+	for idx in range(0, len(TFIDF_weightvector_1)):
+		dotProducts = dotProducts + (TFIDF_weightvector_1[idx] * TFIDF_weightvector_2[idx])
+
+	# Compute the magnitude of the 1st TFIDF weight vector
+	magnitude_1 = 0
+	for idx in range(0, len(TFIDF_weightvector_1)):
+		magnitude_1 = magnitude_1 + (TFIDF_weightvector_1[idx] * TFIDF_weightvector_1[idx])
+
+	# Compute the magnitude of the 2nd TFIDF weight vector
+	magnitude_2 = 0
+	for idx in range(0, len(TFIDF_weightvector_2)):
+		magnitude_2 = magnitude_2 + (TFIDF_weightvector_2[idx] * TFIDF_weightvector_2[idx])
+
+	# Compute the cosine
+	cosine = dotProducts / (sqrt(magnitude_1) * sqrt(magnitude_2))
+
+	return cosine
 
 
 # Return the number of words in a string
@@ -106,6 +141,9 @@ stopwords = [x.strip() for x in stopwords]
 
 unigram_unique_words_no_stopwords = [x for x in unigram_unique_words if x not in stopwords]
 
+print 'Unique words without stopwords'
+print unigram_unique_words_no_stopwords
+
 # VECTOR SPACE MODEL WITH COSINE SIMILARITY MEASURE
 
 NUM_DOCS = len(assignment_files)
@@ -113,11 +151,32 @@ NUM_DOCS = len(assignment_files)
 # Computer Document Frequency (DF) for each term t
 DFs = computeDFs(unigram_unique_words_no_stopwords, assignment_files)
 
+print 'DFs'
+print DFs
+print '\n'
+
 # Compute Inverse Document Frequency (IDF) for each term t
 IDFs = computeIDFs(NUM_DOCS, DFs)
+
+print 'IDFs'
+print IDFs
+print '\n'
 
 # Compute TF-IDF weight vector for each document
 TFIDF_weightvectors = []
 
 for assignment_file in assignment_files:
 	TFIDF_weightvectors.append(computeTFIDFweightvector(assignment_file, unigram_unique_words_no_stopwords, IDFs))
+
+print 'TFIDF weight vectors'
+print TFIDF_weightvectors
+print '\n'
+
+# Compare each pair of assignment using Cosine Similarity
+for idx_1 in range(0, NUM_DOCS):
+	for idx_2 in range(0, NUM_DOCS):
+		if idx_1 != idx_2:
+			cosineSim = compareDocument(TFIDF_weightvectors[idx_1], TFIDF_weightvectors[idx_2])
+			print 'Cosine similarity measure between document {0} and {1} gives {2} as the result'.format(idx_1, idx_2, cosineSim)
+
+
