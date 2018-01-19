@@ -2,7 +2,10 @@
 from string import punctuation
 import os
 
+# Variables
+NUM_DOCS = 0
 MASTER_DOC = 'combined_docs'
+STOPWORDS = 'nltk_en_stopwords'
 
 # Return unique words from a sentence
 def extract_unique_words(sentence):
@@ -21,12 +24,28 @@ with open(MASTER_DOC, 'w') as outfile:
 			for line in infile:
 				outfile.write(line)
 
-# Extract unique words from the MASTER DOCUMENT
+# Extract unique words (unigram, bigram, trigram) from the MASTER DOCUMENT
 with open(MASTER_DOC, 'r') as f:
 	all_text = f.read().replace('\n', ' ')
 
-unique_words = extract_unique_words(all_text)
+# Unique words for unigram vector
+unigram_unique_words = extract_unique_words(all_text)
 
 
+# DATASET PREPROCESSING
 
-	
+# Eliminate stopwords
+with open(STOPWORDS, 'r') as f:
+	stopwords = f.readlines()
+
+stopwords = [x.strip() for x in stopwords]
+
+unigram_unique_words_no_stopwords = [x for x in unigram_unique_words if x not in stopwords]
+
+# VECTOR SPACE MODEL WITH COSINE SIMILARITY MEASURE
+
+NUM_DOCS = len(assignment_files)
+
+# Compute Inverse Document Frequency (IDF) for each term t
+
+
