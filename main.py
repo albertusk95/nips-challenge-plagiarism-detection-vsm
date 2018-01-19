@@ -5,6 +5,7 @@ from string import punctuation
 import os
 
 # Variables
+MODEL = 'unigram'
 NUM_DOCS = 0
 MASTER_DOC = 'combined_docs'
 STOPWORDS = 'nltk_en_stopwords'
@@ -106,9 +107,22 @@ def compareDocument(TFIDF_weightvector_1, TFIDF_weightvector_2):
 	return cosine
 
 
-# Return the number of words in a string
+# Return the number of unigram words in a string
 def computeNumOfWordsInText(text):
-	return len(text.split())
+	numOfWords = len(text.split())
+
+	if MODEL == 'bigram':
+		if numOfWords == 1:
+			numOfWords = 0
+		else:
+			numOfWords = numOfWords - 1
+	elif MODEL == 'trigram':
+		if numOfWords == 1 or numOfWords == 2:
+			numOfWords = 0
+		else:
+			numOfWords = numOfWords - 2
+
+	return numOfWords
 
 
 # Combine all documents into one file called MASTER DOCUMENT
@@ -131,6 +145,15 @@ with open(MASTER_DOC, 'r') as f:
 unigram_unique_words = extract_unique_words(all_text)
 
 
+# [TODO] Unique words for bigram vector
+
+
+
+# [TODO] Unique words for trigram vector
+
+
+
+
 # DATASET PREPROCESSING
 
 # Eliminate stopwords
@@ -141,8 +164,20 @@ stopwords = [x.strip() for x in stopwords]
 
 unigram_unique_words_no_stopwords = [x for x in unigram_unique_words if x not in stopwords]
 
-print 'Unique words without stopwords'
+print 'Unigram unique words without stopwords'
 print unigram_unique_words_no_stopwords
+
+
+# [TODO] Eliminate bigram stopwords
+
+
+
+
+# [TODO] Eliminate trigram stopwords
+
+
+
+
 
 # VECTOR SPACE MODEL WITH COSINE SIMILARITY MEASURE
 
