@@ -1,12 +1,15 @@
 
 from __future__ import division
+import numpy as np
+from sklearn.metrics import jaccard_similarity_score
 from math import log10, sqrt
 from string import punctuation
 import os
 import nltk
 
 # Variables
-MODEL = 'unigram'
+MODEL = 'trigram'
+MEASURE = 'jaccard'
 NUM_DOCS = 0
 MASTER_DOC = 'combined_docs'
 STOPWORDS = 'nltk_en_stopwords'
@@ -175,6 +178,42 @@ def compareDocument(TFIDF_weightvector_1, TFIDF_weightvector_2):
 	return cosine
 
 
+# Return the value of jaccard similarity between two document vectors
+def compareDocumentJaccard(TFIDF_weightvector_1, TFIDF_weightvector_2):
+
+	# How to read the Jaccard coeficient:
+	# The coeficient is multiplied by 100
+	# Two sets that share all members would be 100% similar
+	# The closer to 100%, the more similarity (e.g. 90% is more similar than 89%)
+	# If they share no members, they are 0% similar
+	# The midway point (50%) means that the two sets share half of the members
+
+
+	# Find the intersection between two document vectors
+	TFIDF_weightvector_intersection = []
+	
+	for tfidfweightvector_1 in TFIDF_weightvector_1:
+		if tfidfweightvector_1 in TFIDF_weightvector_2:
+			TFIDF_weightvector_intersection.append(tfidfweightvector_1)
+			break
+
+	# Find the union of all elements (unique values) from both document vectors
+	TFIDF_weightvector_union = []
+
+	for tfidfweightvector_1 in TFIDF_weightvector_1:
+		TFIDF_weightvector_union.append(tfidfweightvector_1)
+
+	for tfidfweightvector_2 in TFIDF_weightvector_2:
+		TFIDF_weightvector_union.append(tfidfweightvector_2)
+
+	TFIDF_weightvector_union = list(set(TFIDF_weightvector_union))
+
+	# Compute the Jaccard coeficient
+	jaccardCoef = len(TFIDF_weightvector_intersection) / len(TFIDF_weightvector_union)
+
+	return jaccardCoef
+
+
 # Return the list of unique words without stopwords
 def eliminateStopwords(unique_words):
 	stopwords = nltk.corpus.stopwords.words('english')
@@ -295,11 +334,19 @@ print 'TFIDF weight vectors'
 print TFIDF_weightvectors
 print '\n'
 
-# Compare each pair of assignment using Cosine Similarity
-for idx_1 in range(0, NUM_DOCS):
-	for idx_2 in range(0, NUM_DOCS):
-		if idx_1 != idx_2:
-			cosineSim = compareDocument(TFIDF_weightvectors[idx_1], TFIDF_weightvectors[idx_2])
-			print 'Cosine similarity measure between document {0} and {1} gives {2} as the result'.format(idx_1, idx_2, cosineSim)
+if MEASURE == 'cosine':
+	# Compare each pair of assignment using Cosine Similarity
+	for idx_1 in range(0, NUM_DOCS):
+		for idx_2 in range(0, NUM_DOCS):
+			if idx_1 != idx_2:
+				cosineSim = compareDocument(TFIDF_weightvectors[idx_1], TFIDF_weightvectors[idx_2])
+				print 'Cosine similarity measure between document {0} and {1} gives {2} as the result'.format(idx_1, idx_2, cosineSim)
+else:
+	# Compare each pair of assignment using Jaccard Similarity
+	for idx_1 in range(0, NUM_DOCS):
+		for idx_2 in range(0, NUM_DOCS):
+			if idx_1 != idx_2:
+				jaccardSim = compareDocumentJaccard(TFIDF_weightvectors[idx_1], TFIDF_weightvectors[idx_2])
+				print 'Jaccard similarity measure between document {0} and {1} gives {2} as the result'.format(idx_1, idx_2, jaccardSim)
 
 
