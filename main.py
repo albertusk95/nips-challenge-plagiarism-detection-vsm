@@ -33,9 +33,29 @@ def extract_bigram_unique_words(text):
 	list_of_unique_bigrms = list(unique_bigrms)
 
 	# Create list of unique bigrams represented as string
-	list_of_unique_bigrams_str = [ "%s %s" % x for x in list_of_unique_bigrms ]
+	list_of_unique_bigrms_str = [ "%s %s" % x for x in list_of_unique_bigrms ]
 
-	return list_of_unique_bigrams_str
+	return list_of_unique_bigrms_str
+
+
+# Return trigram unique words from a text
+def extract_trigram_unique_words(text):
+	# Remove punctuations
+	text_no_punctuations = text.translate(None, punctuation).lower().split()
+
+	# Create trigrams from the input text
+	trigrms = list(nltk.trigrams(text_no_punctuations))
+
+	# Create unique trigrams
+	unique_trigrms = set(trigrms)
+
+	# Convert the set of unique trigrams back into list
+	list_of_unique_trigrms = list(unique_trigrms)
+
+	# Create list of unique trigrams represented as string
+	list_of_unique_trigrms_str = [ "%s %s %s" % x for x in list_of_unique_trigrms ]
+
+	return list_of_unique_trigrms_str
 
 
 # Return the document frequency for each term in the input list
@@ -74,7 +94,13 @@ def computeIDFs(NUM_DOCS, DFs):
 	list_of_idf = []
 
 	for df in DFs:
-		idf = 1 + (log10(NUM_DOCS / df))
+		idf = 0
+
+		if df == 0:
+			idf = 1
+		else:
+			idf = 1 + (log10(NUM_DOCS / df))
+
 		list_of_idf.append(idf)
 
 	return list_of_idf
@@ -139,6 +165,11 @@ def compareDocument(TFIDF_weightvector_1, TFIDF_weightvector_2):
 		magnitude_2 = magnitude_2 + (TFIDF_weightvector_2[idx] * TFIDF_weightvector_2[idx])
 
 	# Compute the cosine
+	if magnitude_1 == 0:
+		magnitude_1 = 0.000001
+	if magnitude_2 == 0:
+		magnitude_2 = 0.000001
+
 	cosine = dotProducts / (sqrt(magnitude_1) * sqrt(magnitude_2))
 
 	return cosine
@@ -208,16 +239,12 @@ all_text_no_quote = all_text.replace("'", " ")
 # Default is unigram
 unique_words = extract_unique_words(all_text_no_quote)
 
-#if MODEL == 'bigram':
-# Unique words for bigram vector
-#unique_words = extract_bigram_unique_words(all_text_no_quote)
-
-
-# [TODO] Unique words for trigram vector
-
-
-
-
+if MODEL == 'bigram':
+	# Unique words for bigram vector
+	unique_words = extract_bigram_unique_words(all_text_no_quote)
+elif MODEL == 'trigram':
+	# Unique words for trigram vector
+	unique_words = extract_trigram_unique_words(all_text_no_quote)
 
 
 
