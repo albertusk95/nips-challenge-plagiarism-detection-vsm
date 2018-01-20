@@ -3,6 +3,7 @@ from __future__ import division
 from math import log10, sqrt
 from string import punctuation
 import os
+import nltk
 
 # Variables
 MODEL = 'unigram'
@@ -11,9 +12,31 @@ MASTER_DOC = 'combined_docs'
 STOPWORDS = 'nltk_en_stopwords'
 DATASET = 'docs'
 
-# Return unique words from a sentence
-def extract_unique_words(sentence):
-	return sentence.translate(None, punctuation).split()
+# Return unigram unique words from a text
+def extract_unique_words(text):
+	#return text.translate(None, punctuation).split()
+	return set(text.translate(None, punctuation).lower().split())
+
+
+# Return bigram unique words from a text
+def extract_bigram_unique_words(text):
+	# Remove punctuations
+	text_no_punctuations = text.translate(None, punctuation).lower().split()
+
+	# Create bigrams from the input text
+	bigrms = list(nltk.bigrams(text_no_punctuations))
+
+	# Create unique bigrams
+	unique_bigrms = set(bigrms)
+
+	# Convert the set of unique bigrams back into list
+	list_of_unique_bigrms = list(unique_bigrms)
+
+	# Create list of unique bigrams represented as string
+	list_of_unique_bigrams_str = [ "%s %s" % x for x in list_of_unique_bigrms ]
+
+	return list_of_unique_bigrams_str
+
 
 # Return the document frequency for each term in the input list
 def computeDFs(unique_words, list_of_assignment_files):
@@ -27,7 +50,15 @@ def computeDFs(unique_words, list_of_assignment_files):
 			with open(assignment_file, 'r') as f:
 				all_text = f.read().replace('\n', ' ')
 
-			if unique_word in all_text:
+			
+			# Convert the whole text into lower case
+			all_text = all_text.lower()
+
+			# Replace single quote (" ' ") into single white space
+			all_text_no_quote = all_text.replace("'", " ")
+
+
+			if unique_word in all_text_no_quote:
 				counter = counter + 1
 
 		list_of_df.append(counter)
@@ -54,7 +85,13 @@ def computeTF(assignment_file, unique_word):
 	with open(assignment_file, 'r') as f:
 		all_text = f.read().replace('\n', ' ')
 
-	return all_text.count(unique_word) / computeNumOfWordsInText(all_text)
+	# Convert the whole text into lower case
+	all_text = all_text.lower()
+
+	# Replace single quote (" ' ") into single white space
+	all_text_no_quote = all_text.replace("'", " ")
+
+	return all_text_no_quote.count(unique_word) / computeNumOfWordsInText(all_text_no_quote)
 
 
 # Return the TF-IDF weight vector for a document
@@ -107,6 +144,25 @@ def compareDocument(TFIDF_weightvector_1, TFIDF_weightvector_2):
 	return cosine
 
 
+# Return the list of unique words without stopwords
+def eliminateStopwords(unique_words):
+	stopwords = nltk.corpus.stopwords.words('english')
+
+	no_stopwords_list = []
+
+	for unique_word in unique_words:
+		words = unique_word.split()
+
+		no_stopwords_list.append(unique_word)
+
+		for word in words:
+			if word in stopwords:
+				no_stopwords_list.pop()
+				break
+
+	return no_stopwords_list
+
+
 # Return the number of unigram words in a string
 def computeNumOfWordsInText(text):
 	numOfWords = len(text.split())
@@ -141,12 +197,20 @@ with open(MASTER_DOC, 'w') as outfile:
 with open(MASTER_DOC, 'r') as f:
 	all_text = f.read().replace('\n', ' ')
 
-# Unique words for unigram vector
-unigram_unique_words = extract_unique_words(all_text)
 
+# Convert the whole text into lower case
+all_text = all_text.lower()
 
-# [TODO] Unique words for bigram vector
+# Replace single quote (" ' ") into single white space
+all_text_no_quote = all_text.replace("'", " ")
 
+# Create unique words (vocabulary) based on the applied model
+# Default is unigram
+unique_words = extract_unique_words(all_text_no_quote)
+
+#if MODEL == 'bigram':
+# Unique words for bigram vector
+#unique_words = extract_bigram_unique_words(all_text_no_quote)
 
 
 # [TODO] Unique words for trigram vector
@@ -154,28 +218,25 @@ unigram_unique_words = extract_unique_words(all_text)
 
 
 
+
+
+
 # DATASET PREPROCESSING
 
 # Eliminate stopwords
+'''
 with open(STOPWORDS, 'r') as f:
 	stopwords = f.readlines()
 
 stopwords = [x.strip() for x in stopwords]
 
-unigram_unique_words_no_stopwords = [x for x in unigram_unique_words if x not in stopwords]
+unique_words_no_stopwords = [x for x in unique_words if x not in stopwords]
+'''
 
-print 'Unigram unique words without stopwords'
-print unigram_unique_words_no_stopwords
+unique_words_no_stopwords = eliminateStopwords(unique_words)
 
-
-# [TODO] Eliminate bigram stopwords
-
-
-
-
-# [TODO] Eliminate trigram stopwords
-
-
+print 'Unique words without stopwords'
+print unique_words_no_stopwords
 
 
 
@@ -184,7 +245,7 @@ print unigram_unique_words_no_stopwords
 NUM_DOCS = len(assignment_files)
 
 # Computer Document Frequency (DF) for each term t
-DFs = computeDFs(unigram_unique_words_no_stopwords, assignment_files)
+DFs = computeDFs(unique_words_no_stopwords, assignment_files)
 
 print 'DFs'
 print DFs
@@ -201,7 +262,7 @@ print '\n'
 TFIDF_weightvectors = []
 
 for assignment_file in assignment_files:
-	TFIDF_weightvectors.append(computeTFIDFweightvector(assignment_file, unigram_unique_words_no_stopwords, IDFs))
+	TFIDF_weightvectors.append(computeTFIDFweightvector(assignment_file, unique_words_no_stopwords, IDFs))
 
 print 'TFIDF weight vectors'
 print TFIDF_weightvectors
