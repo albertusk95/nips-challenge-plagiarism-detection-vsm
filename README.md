@@ -8,6 +8,10 @@ I implemented the paper based on the research methodology
 
 https://arxiv.org/pdf/1412.7782.pdf
 
+## Main Goal
+
+Develope an effective plagiarism detection tool for text based assignments by comparing unigram, bigram, and trigram of vector space model with cosine and jaccard similarity measure
+
 ## Programming Tools
 
 <ul>
@@ -42,10 +46,6 @@ Several important files / directories:
 To run the program, execute the following command:
 
 _python main.py_
-
-## Main Goal
-
-Develope an effective plagiarism detection tool for text based assignments by comparing unigram, bigram, and trigram of vector space model with cosine and jaccard similarity measure
 
 ## Methodology
 
