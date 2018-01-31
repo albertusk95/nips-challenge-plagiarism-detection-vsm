@@ -65,5 +65,6 @@ Develope an effective plagiarism detection tool for text based assignments by co
 
 ---
 
-**Albertus Kelvin**
-**January 20th, 2018**
+**Albertus Kelvin**<br/>
+**Code was developed on January 20th, 2018**<br/>
+**Code was published on January 31th, 2018**
