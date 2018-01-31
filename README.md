@@ -16,6 +16,33 @@ https://arxiv.org/pdf/1412.7782.pdf
   <li>NLTK</li>
 </ul>
 
+## Files
+
+Several important files / directories:
+<ul>
+  <li>main.py
+    <p>
+      Main file containing the whole source code
+    </p>
+  </li>
+  <li>docs
+    <p>
+      A directory containing students answer. Each answer is stored in a document having specified file name, namely **assignment_index**. The word **assignment** is fixed and word **index** is an integer that will be incremented each time a new student is added
+    </p>
+  </li>
+  <li>combined_docs
+    <p>
+      Each student answer will be combined into one document called MASTER Document. The detection processes will be done using this combined document
+    </p>
+  </li>
+</ul>
+
+## To Run
+
+To run the program, execute the following command:
+
+_python main.py_
+
 ## Main Goal
 
 Develope an effective plagiarism detection tool for text based assignments by comparing unigram, bigram, and trigram of vector space model with cosine and jaccard similarity measure
