@@ -50,12 +50,12 @@ _python main.py_
 ## Methodology
 
 <ul>
-  <li>Combining students answer into one single answer file (MASTER DOCUMENT)
+  <li><b>Combining students answer into one single answer file (MASTER DOCUMENT)</b>
     <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_1.png?raw=true"/>
     </p>
   </li>
-  <li>Extract unique words (unigram, bigram, trigram) from the MASTER DOCUMENT
+  <li><b>Extract unique words (unigram, bigram, trigram) from the MASTER DOCUMENT</b>
     <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_2.png?raw=true"/>
     </p>
@@ -63,27 +63,27 @@ _python main.py_
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_3.png?raw=true"/>
     </p>
   </li>
-  <li>Eliminate stopwords
+  <li><b>Eliminate stopwords</b>
     <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_4.png?raw=true"/>
     </p>
   </li>
-  <li>Compute Document Frequency (DF) and Inverse Document Frequency (IDF) for each term
+  <li><b>Compute Document Frequency (DF) and Inverse Document Frequency (IDF) for each term</b>
     <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_5.png?raw=true"/>
     </p>
   </li>
-  <li>Compute TF-IDF Weight Vector for each document
+  <li><b>Compute TF-IDF Weight Vector for each document</b>
    <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_6.png?raw=true"/>
    </p>
   </li>
-  <li>Compare each pair of assignment using Cosine Similarity
+  <li><b>Compare each pair of assignment using Cosine Similarity</b>
    <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_7.png?raw=true"/>
    </p>
   </li>
-  <li>Compare each pair of assignment using Jaccard Similarity
+  <li><b>Compare each pair of assignment using Jaccard Similarity</b>
    <p>
       <img src="https://github.com/albertusk95/nips-challenge-plagiarism-detection-vsm/blob/master/assets/img/step_8.png?raw=true"/>
    </p>
