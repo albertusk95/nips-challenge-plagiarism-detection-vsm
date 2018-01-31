@@ -20,17 +20,17 @@ https://arxiv.org/pdf/1412.7782.pdf
 
 Several important files / directories:
 <ul>
-  <li>main.py
+  <li><b>main.py</b>
     <p>
       Main file containing the whole source code
     </p>
   </li>
-  <li>docs
+  <li><b>docs</b>
     <p>
-      A directory containing students answer. Each answer is stored in a document having specified file name, namely **assignment_index**. The word **assignment** is fixed and word **index** is an integer that will be incremented each time a new student is added
+      A directory containing students answer. Each answer is stored in a document having specified file name, namely <b>assignment_index</b>. The word <b>assignment</b> is fixed and word <b>index</b> is an integer that will be incremented each time a new student is added
     </p>
   </li>
-  <li>combined_docs
+  <li><b>combined_docs</b>
     <p>
       Each student answer will be combined into one document called MASTER Document. The detection processes will be done using this combined document
     </p>
