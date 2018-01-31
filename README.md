@@ -1,6 +1,6 @@
 # Plagiarism Detection on Electronic Text Based Assignments Using Vector Space Model (iciafs14)
 
-## Global NIPS Paper Implementation Challenge 2017
+## Global NIPS Paper Implementation Challenge
 
 I implemented the paper based on the research methodology
 
