@@ -95,4 +95,4 @@ _python main.py_
 **Albertus Kelvin**<br/>
 **Bandung Institute of Technology**<br/><br/>
 **Code was developed on January 20th, 2018**<br/>
-**Code was made publicly available on January 31th, 2018**
+**Code was made publicly available on January 31st, 2018**
